@@ -254,7 +254,7 @@ export default class App extends React.Component {
           let profileEmailId = respData[0].email;
           let permissions = permission;
           let isNewUser = respData[0].license === "";
-          let currentView = isNewUser?"SubscriptionDashboard":"Dashboard";
+          let currentView = isNewUser ? "SubscriptionDashboard":"Dashboard";
           this.setState({
             currentView: currentView,
             isNewUser: isNewUser
@@ -293,7 +293,7 @@ export default class App extends React.Component {
         },
         userId: userId,
         permissions: permissions,
-        currentView: "Dashboard",
+        //currentView: "Dashboard",
       }); 
     } else {
       let apiEndPoint = this.state.apiEndPoints.baseUrl + "snapshot";
@@ -323,7 +323,7 @@ export default class App extends React.Component {
               },
               userId: userId,
               permissions: permissions,
-              currentView: "Dashboard",
+              //currentView: "Dashboard",
             }); 
           });
         } else {
