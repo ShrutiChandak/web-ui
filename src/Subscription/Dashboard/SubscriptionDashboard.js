@@ -49,7 +49,7 @@ export default class SubscriptionDashboard extends React.Component {
         if (sessionStorage.getItem("userData") !== null) {
           let userData =  JSON.parse(sessionStorage.getItem("userData"));
           console.log(userData);
-          currentForm.licenseId.value = userData[0].license;
+          currentForm.licenseId.value = this.props.licenseId;
           currentForm.oidcUserId.value = userData[0].userId;
           this.setState({
             transactionForm: currentForm

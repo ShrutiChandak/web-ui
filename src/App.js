@@ -124,6 +124,7 @@ export default class App extends React.Component {
       user: "OpsAdmin",
       isNewUser: false,
       scope : {},
+      licenseId : "",
     };
   }
 
@@ -222,8 +223,14 @@ export default class App extends React.Component {
         response.json().then((respData) => {
           this.hideGlobalMessage();
           sessionStorage.setItem("scope", JSON.stringify(respData));
+          let scope = JSON.stringify(respData);
+          let isNewUser = scope && Object.keys(scope).length === 0 && Object.getPrototypeOf(scope) === Object.prototype;
+          let currentView = isNewUser ? "SubscriptionDashboard":"Dashboard";
+
           this.setState({
-            scope: respData
+            scope: scope,
+            isNewUser : isNewUser,
+            currentView: currentView,
           });
         });
       } else {
@@ -249,15 +256,16 @@ export default class App extends React.Component {
         response.json().then((respData) => {
           this.hideGlobalMessage();
           sessionStorage.setItem("userData", JSON.stringify(respData));
-          let userId = respData[0].userId;
+          /* let userId = respData[0].userId;
           let profileName = respData[0].fullName;
           let profileEmailId = respData[0].email;
-          let permissions = permission;
-          let isNewUser = respData[0].license === "";
-          let currentView = isNewUser ? "SubscriptionDashboard":"Dashboard";
+          let permissions = permission; */
+          let license = respData[0].license;
+          
           this.setState({
-            currentView: currentView,
-            isNewUser: isNewUser
+            /* currentView: currentView,
+            isNewUser: isNewUser, */
+            licenseId : license
           });
 
         });
@@ -279,13 +287,11 @@ export default class App extends React.Component {
     if (snapshotData !== null) {
       let jsonData = JSON.parse(snapshotData);
       let data = jsonData["ab2a2691-a563-486c-9883-5111ff36ba9b"];
-      //console.log("optimized Data" , data);
       this.hideGlobalMessage();
       let userId = data.userId === undefined ? "" : data.userId;
       let profileName = data.username === undefined ? "" : data.username;
       let profileEmailId = data.email === undefined ? "" : data.email;
       let permissions = permission === undefined ? "" : permission;
-      console.log(profileName);
       this.setState({
         profileData: {
           email: profileEmailId,
@@ -315,7 +321,6 @@ export default class App extends React.Component {
             let profileName = data.username;
             let profileEmailId = data.email;
             let permissions = permission;
-            console.log(data);
             this.setState({
               profileData: {
                 email: profileEmailId,
@@ -413,6 +418,7 @@ export default class App extends React.Component {
       case "SubscriptionDashboard":
         return (
           <SubscriptionDashboard
+            licenseId = {this.state.licenseId}
             helpText={HELPTEXT}
             authToken={this.state.authToken}
             showGlobalMessage={this.showGlobalMessage.bind(this)}
